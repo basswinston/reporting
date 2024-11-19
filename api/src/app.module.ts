@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config'
 import { validate } from './env.validation'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
+import { UserModule } from './user/user.module'
 
 @Module({
     imports: [
@@ -19,6 +20,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
             autoLoadEntities: true,
             namingStrategy: new SnakeNamingStrategy(),
         }),
+        UserModule,
     ],
     controllers: [AppController],
     providers: [AppService],
