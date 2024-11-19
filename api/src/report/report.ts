@@ -1,23 +1,25 @@
 import {
     Column,
-    Entity,
+    Entity as _Entity,
+    ManyToMany,
     JoinTable,
     ManyToOne,
+    OneToOne,
     PrimaryGeneratedColumn,
+    JoinColumn,
 } from 'typeorm'
 import {
     IsBoolean,
     IsDate,
-    isNotEmpty,
     IsNotEmpty,
     IsNumber,
     IsString,
 } from 'class-validator'
-import { report_user } from 'src/report_user/report_user'
-import { report_entities_entity } from 'src/report_entities_entity/report_entities_entity'
-import { incident } from 'src/incident/incident'
+import { User } from '../user/user'
+import { Entity } from '../entity/entity'
+import { Incident } from '../incident/incident'
 
-@Entity()
+@_Entity()
 export class Report {
     @PrimaryGeneratedColumn()
     @IsNotEmpty()
@@ -41,9 +43,15 @@ export class Report {
     @IsString()
     reporterId: number
 
+    @ManyToOne(() => User, (user) => user.authoredReports)
+    author: User
+
     @Column()
     @IsString()
     assignedTo: number
+
+    @ManyToOne(() => User, (user) => user.authoredReports)
+    assignedUser: User
 
     @Column()
     @IsNotEmpty()
@@ -65,15 +73,11 @@ export class Report {
     @IsString()
     incidentId: number
 
-    @ManyToOne(() => Report_user, (report_user) => report_user.userId)
-    reportUser: Report_user
-
-    @OnetoOne(
-        () => Report_entities_entity,
-        (report_entities_entity) => report_entities_entity.report_id,
-    )
-    reports: Report_entities_entity
-
-    @OnetoOne(() => Incident, (incident) => incident.report_id)
+    @OneToOne(() => Incident)
+    @JoinColumn()
     incident: Incident
+
+    @ManyToMany(() => Entity, (entity) => entity.reports)
+    @JoinTable()
+    entities: Entity[]
 }

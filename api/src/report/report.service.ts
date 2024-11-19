@@ -10,10 +10,10 @@ export class ReportService {
     // returns all reports
     async getAllReports(): Promise<Report[]> {
         return await this.repo.find({
-            relations: {
-                reportUser: true,
-                incident: true,
-            },
+            // relations: {
+            //     reportUser: true,
+            //     incident: true,
+            // },
         })
     }
 
@@ -24,10 +24,10 @@ export class ReportService {
                 where: {
                     reportId: idToFind,
                 },
-                relations: {
-                    reportUser: true,
-                    incident: true,
-                },
+                // relations: {
+                //     reportUser: true,
+                //     incident: true,
+                // },
             })
             .catch(() => {
                 throw new HttpException(

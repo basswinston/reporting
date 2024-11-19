@@ -1,7 +1,7 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository, In, FindOneOptions } from 'typeorm'
-import { User } from './user.entity'
+import { User } from './user'
 import { SaveUserDto } from './dto/save-user.dto'
 
 @Injectable()

@@ -5,7 +5,7 @@ import {
     IsPhoneNumber,
     IsEnum,
 } from 'class-validator'
-import { UserRole } from '../user.entity'
+import { UserRole } from '../user'
 
 export class SaveUserDto {
     @IsNotEmpty()

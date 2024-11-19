@@ -5,7 +5,7 @@ import {
     CreateDateColumn,
     OneToMany,
 } from 'typeorm'
-import { Report } from '../report/report.entity'
+import { Report } from '../report/report'
 
 export enum UserRole {
     Admin = 'admin',

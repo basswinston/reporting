@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common'
 import { UserService } from './user.service'
-import { User } from './user.entity'
+import { User } from './user'
 import { SaveUserDto } from './dto/save-user.dto'
 
 @Controller('user')

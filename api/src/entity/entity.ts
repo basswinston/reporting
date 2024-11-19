@@ -1,5 +1,11 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
-import { Column, Entity as _Entity, PrimaryGeneratedColumn } from 'typeorm'
+import {
+    Column,
+    Entity as _Entity,
+    PrimaryGeneratedColumn,
+    ManyToMany,
+} from 'typeorm'
+import { Report } from '../report/report'
 
 @_Entity()
 export class Entity {
@@ -32,4 +38,7 @@ export class Entity {
     @IsNotEmpty()
     @IsString()
     phone: string
+
+    @ManyToMany(() => Report, (report) => report.entities)
+    reports: Report[]
 }

@@ -17,7 +17,7 @@ export class EntityService {
         return await this.repo
             .findOneOrFail({
                 where: {
-                    id: idToFind,
+                    entityId: idToFind,
                 },
             })
             .catch(() => {
@@ -33,7 +33,7 @@ export class EntityService {
         await this.repo
             .exists({
                 where: {
-                    id: newEntity.entityId,
+                    entityId: newEntity.entityId,
                 },
             })
             .then((exists) => {
@@ -62,7 +62,7 @@ export class EntityService {
         await this.repo
             .exists({
                 where: {
-                    id: entityToUpdate.entityId,
+                    entityId: entityToUpdate.entityId,
                 },
             })
             .then((exists) => {

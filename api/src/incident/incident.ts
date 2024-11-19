@@ -1,17 +1,6 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
-// Import from other module to create relations
-
 import { IsNotEmpty, IsNumber, IsString, IsDate } from 'class-validator'
-
-/** Schema:
-
-      incident_id - PK - Unique - PK - Not Null
-      incident_date - date - nullable
-      incident_location - varchar - nullable
-      related_accounts - text - nullable
-      transaction_details - text - nullable
-      description - text - nullable
-*/
+import { Report } from '../report/report'
 
 @Entity()
 export class Incident {
@@ -42,11 +31,6 @@ export class Incident {
     @IsString()
     description: String
 
-    /**
-     * Each report has a single Incident it is reporting
-     * Leading to a 1-1 relationship
-     */
-
-    @OneToOne(() => Report, (report) => report.incident)
+    @OneToOne(() => Report)
     reports: Report
 }
