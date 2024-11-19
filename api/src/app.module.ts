@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies'
 import { IncidentModule } from './incident/incident.module'
 import { UserModule } from './user/user.module'
+import { ReportModule } from './report/report.module'
 
 @Module({
     imports: [
@@ -23,6 +24,7 @@ import { UserModule } from './user/user.module'
         }),
         UserModule,
         IncidentModule,
+        ReportModule,
     ],
     controllers: [AppController],
     providers: [AppService],
