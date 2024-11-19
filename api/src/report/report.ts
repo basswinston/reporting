@@ -1,68 +1,79 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { IsBoolean, IsDate, isNotEmpty, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { report_user } from "src/report_user/report_user";
-import { report_entities_entity } from "src/report_entities_entity/report_entities_entity";
-import { incident } from "src/incident/incident";
+import {
+    Column,
+    Entity,
+    JoinTable,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+} from 'typeorm'
+import {
+    IsBoolean,
+    IsDate,
+    isNotEmpty,
+    IsNotEmpty,
+    IsNumber,
+    IsString,
+} from 'class-validator'
+import { report_user } from 'src/report_user/report_user'
+import { report_entities_entity } from 'src/report_entities_entity/report_entities_entity'
+import { incident } from 'src/incident/incident'
 
 @Entity()
 export class Report {
-
     @PrimaryGeneratedColumn()
     @IsNotEmpty()
     @IsNumber()
-    report_id: number
+    reportId: number
 
     @Column()
     @IsNotEmpty()
     @IsString()
-    report_title: string;
+    reportTitle: string
 
     @Column()
     @IsString()
-    report_type: string;
+    reportType: string
 
     @Column()
     @IsString()
-    report_status: string;
+    reportStatus: string
 
     @Column()
     @IsString()
-    reporter_id: number;
+    reporterId: number
 
     @Column()
     @IsString()
-    assigned_to: number;
+    assignedTo: number
 
     @Column()
     @IsNotEmpty()
     @IsBoolean()
-    is_resolved: boolean;
+    isResolved: boolean
 
     @Column()
     @IsNotEmpty()
     @IsDate()
-    creation_date: Date;
+    creationDate: Date
 
     @Column()
     @IsNotEmpty()
     @IsDate()
-    last_edited: Date;
+    lastEdited: Date
 
     @Column()
     @IsNotEmpty()
     @IsString()
-    incident_id: number;
+    incidentId: number
 
-    @ManyToOne(() => Report_user, report_user => report_user.userId)
-    report_user: Report_user;
+    @ManyToOne(() => Report_user, (report_user) => report_user.userId)
+    reportUser: Report_user
 
+    @OnetoOne(
+        () => Report_entities_entity,
+        (report_entities_entity) => report_entities_entity.report_id,
+    )
+    reports: Report_entities_entity
 
-    @OnetoOne(() => Report_entities_entity, report_entities_entity => report_entities_entity.report_id)
-    report_entities_entity: Report_entities_entity;
-
-    
-    @OnetoOne(() => Incident, incident => incident.report_id)
-    incident: Incident;
-
-
+    @OnetoOne(() => Incident, (incident) => incident.report_id)
+    incident: Incident
 }

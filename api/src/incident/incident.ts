@@ -1,9 +1,7 @@
-
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
 // Import from other module to create relations
 
-import { IsNotEmpty, IsNumber, IsString, Length, IsDate } from "class-validator";
-
+import { IsNotEmpty, IsNumber, IsString, IsDate } from 'class-validator'
 
 /** Schema:
 
@@ -17,39 +15,38 @@ import { IsNotEmpty, IsNumber, IsString, Length, IsDate } from "class-validator"
 
 @Entity()
 export class Incident {
+    // PK
+    @PrimaryGeneratedColumn()
+    @IsNotEmpty()
+    @IsNumber()
+    incidentId: number
 
-  // PK
-  @PrimaryGeneratedColumn()
-  @IsNotEmpty()
-  @IsNumber()
-  incident_id: number;
+    @Column()
+    @IsDate()
+    incidentDate: Date
 
-  @Column()
-  @IsDate()
-  incident_date: Date;
+    @Column()
+    @IsString()
+    //@Length()
+    incidentLocation: String
 
-  @Column()
-  @IsString()
-  //@Length()
-  incident_location: String;
+    @Column()
+    @IsString()
+    relatedAccounts: String
 
-  @Column()
-  @IsString()
-  related_accounts: String;
+    @Column()
+    @IsString()
+    transactionDetails: String
 
-  @Column()
-  @IsString()
-  transaction_details: String;
+    @Column()
+    @IsString()
+    description: String
 
-  @Column()
-  @IsString()
-  description: String;
+    /**
+     * Each report has a single Incident it is reporting
+     * Leading to a 1-1 relationship
+     */
 
-  /** 
-   * Each report has a single Incident it is reporting
-   * Leading to a 1-1 relationship  
-  */
-  
-  @OneToOne(() => Report, report => report.incident)
-  reports: Report;
+    @OneToOne(() => Report, (report) => report.incident)
+    reports: Report
 }

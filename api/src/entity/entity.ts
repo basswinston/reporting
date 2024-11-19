@@ -1,37 +1,35 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
+import { Column, Entity as _Entity, PrimaryGeneratedColumn } from 'typeorm'
 
-@Entity()
-export class Entitys { 
-
+@_Entity()
+export class Entity {
     @PrimaryGeneratedColumn()
     @IsNotEmpty()
     @IsNumber()
-    entity_id: number;
+    entityId: number
 
     @Column()
     @IsNotEmpty()
     @IsString()
-    entity_type: string;
+    entityType: string
 
     @Column()
     @IsNotEmpty()
     @IsString()
-    industry: string;
+    industry: string
 
     @Column()
     @IsNotEmpty()
     @IsString()
-    address: string;
+    address: string
 
     @Column()
     @IsNotEmpty()
     @IsString()
-    email: string;
-    
+    email: string
+
     @Column()
     @IsNotEmpty()
     @IsString()
-    phone: string;
-
+    phone: string
 }
