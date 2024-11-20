@@ -1,28 +1,31 @@
 import {
     IsNotEmpty,
     IsOptional,
+    IsString,
     IsEmail,
     IsPhoneNumber,
     IsEnum,
 } from 'class-validator'
 import { UserRole } from '../user'
 
-export class SaveUserDto {
+export class CreateUserDto {
     @IsNotEmpty()
+    @IsString()
     firstName: string
 
     @IsNotEmpty()
+    @IsString()
     lastName: string
 
     @IsOptional()
     @IsEmail()
-    email: string
+    email?: string
 
     @IsOptional()
     @IsPhoneNumber()
-    phone: string
+    phone?: string
 
     @IsOptional()
     @IsEnum(UserRole)
-    role: UserRole
+    role?: UserRole
 }

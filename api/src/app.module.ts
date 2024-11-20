@@ -21,6 +21,7 @@ import { ReportModule } from './report/report.module'
             database: process.env.DATABASE_NAME,
             autoLoadEntities: true,
             namingStrategy: new SnakeNamingStrategy(),
+            synchronize: true,
         }),
         UserModule,
         IncidentModule,
