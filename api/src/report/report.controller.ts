@@ -2,6 +2,8 @@ import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put } from '@nest
 import { ReportService } from './report.service';
 import { Report } from "./report";
 import { DeleteResult } from 'typeorm';
+import { CreateReportDto } from './dto/create-report-dto';
+import { UpdateReportDto } from './dto/update-report-dto';
 
 @Controller('report')
 export class ReportController {
@@ -21,14 +23,15 @@ export class ReportController {
 
   @Post('/create')
   @HttpCode(201)
-  createReport(@Body() newReport: Report) {
+  createReport(@Body() newReport: CreateReportDto) {
     return this.reportService.createReport(newReport);
   }
 
   @Put('/update/:id')
   @HttpCode(200)
-  updateReport(@Param('id') routeId: number, @Body() reportToUpdate) {
-    return this.reportService.updateReport(routeId, reportToUpdate);
+  async updateReport(@Param('id') routeId: number, @Body() reportToUpdate: UpdateReportDto) {
+    const report = await this.reportService.getReportById(routeId);
+    return await this.reportService.updateReport(report, reportToUpdate);
   }
 
 

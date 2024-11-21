@@ -2,6 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Report } from './report'
 import { DeleteResult, Repository } from 'typeorm'
+import { CreateReportDto } from './dto/create-report-dto'
+import { UpdateReportDto } from './dto/update-report-dto'
 
 @Injectable()
 export class ReportService {
@@ -38,50 +40,15 @@ export class ReportService {
     }
 
     // creates a new report
-    async createReport(newReport: Report): Promise<Report> {
-        await this.repo
-            .exists({
-                where: {
-                    reportId: newReport.reportId,
-                },
-            })
-            .then((exists) => {
-                if (exists)
-                    throw new HttpException(
-                        `Student with ID ${newReport.reportId} already exists!`,
-                        HttpStatus.BAD_REQUEST,
-                    )
-            })
-
-        return await this.repo.save(newReport)
+    async createReport(data: CreateReportDto) {
+        const newUser = this.repo.create(data)
+        return await this.repo.save(newUser)
     }
 
     // update given report
-    async updateReport(routeId: number, reportToUpdate: Report) {
-        // checking if the route ID and the one in the body match
-        if (routeId != reportToUpdate.reportId) {
-            throw new HttpException(
-                `Route ID and Body ID do not match!`,
-                HttpStatus.BAD_REQUEST,
-            )
-        }
-
-        // checking that the Report we want to update exists in the database already
-        await this.repo
-            .exists({
-                where: {
-                    reportId: reportToUpdate.reportId,
-                },
-            })
-            .then((exists) => {
-                if (!exists)
-                    throw new HttpException(
-                        `Report with ID ${reportToUpdate.reportId} does not exist!`,
-                        HttpStatus.NOT_FOUND,
-                    )
-            })
-
-        return await this.repo.save(reportToUpdate)
+    async updateReport(report: Report, updateData: UpdateReportDto) {
+        const updatedUser = this.repo.merge(report, updateData)
+        return await this.repo.save(updatedUser)
     }
 
     // delete given report

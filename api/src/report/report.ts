@@ -7,70 +7,77 @@ import {
     OneToOne,
     PrimaryGeneratedColumn,
     JoinColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
 } from 'typeorm'
-import {
-    IsBoolean,
-    IsDate,
-    IsNotEmpty,
-    IsNumber,
-    IsString,
-} from 'class-validator'
 import { User } from '../user/user'
 import { Entity } from '../entity/entity'
 import { Incident } from '../incident/incident'
 
+export enum ReportType { 
+    MoneyLaundering = 'money_laundering',
+    Fraud = 'fraud',
+    TerroristFinancing = 'terrorist_financing',
+    IdentityTheft = 'identity_theft',
+    Cybercrime = 'cybercrime',
+    TaxEvasion = 'tax_evasion',
+    Other = 'other'
+}
+export enum ReportStatus {  
+    New = 'new',
+    InProgress = 'in_progress',
+    Resolved = 'resolved',
+    Rejected = 'rejected',
+    Closed = 'closed'
+}
+
 @_Entity()
 export class Report {
     @PrimaryGeneratedColumn()
-    @IsNotEmpty()
-    @IsNumber()
     reportId: number
 
     @Column()
-    @IsNotEmpty()
-    @IsString()
     reportTitle: string
 
-    @Column()
-    @IsString()
-    reportType: string
+    @Column( { 
+        type: 'enum',
+        enum: ReportType
+     } )
+    reportType: ReportType
+
+    @Column({
+        type: 'enum',
+        enum: ReportStatus,
+        default: ReportStatus.New
+    })
+    reportStatus: ReportStatus
 
     @Column()
-    @IsString()
-    reportStatus: string
-
-    @Column()
-    @IsString()
     reporterId: number
 
     @ManyToOne(() => User, (user) => user.authoredReports)
     author: User
 
     @Column()
-    @IsString()
     assignedTo: number
 
     @ManyToOne(() => User, (user) => user.authoredReports)
     assignedUser: User
 
-    @Column()
-    @IsNotEmpty()
-    @IsBoolean()
-    isResolved: boolean
-
-    @Column()
-    @IsNotEmpty()
-    @IsDate()
+    @CreateDateColumn({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP'
+    })
     creationDate: Date
 
-    @Column()
-    @IsNotEmpty()
-    @IsDate()
+    @UpdateDateColumn({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP',
+        onUpdate: 'CURRENT_TIMESTAMP'
+    })
     lastEdited: Date
 
     @Column()
-    @IsNotEmpty()
-    @IsString()
     incidentId: number
 
     @OneToOne(() => Incident)
