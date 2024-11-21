@@ -11,6 +11,8 @@ import {
 import { EntityService } from './entity.service'
 import { Entity } from './entity'
 import { DeleteResult } from 'typeorm'
+import { CreateEntityDto } from './dto/create-entity-dto'
+import { UpdateEntityDto } from './dto/update-entity-dto'
 
 @Controller('entity')
 export class EntityController {
@@ -33,14 +35,18 @@ export class EntityController {
     // update a entity
     @Put('/update/:id')
     @HttpCode(200)
-    updateEntity(@Param('id') routeId: number, @Body() entityToUpdate) {
-        return this.entityService.updateEntity(routeId, entityToUpdate)
+    async updateEntity(
+        @Param('id') id: number,
+        @Body() entityToUpdate: UpdateEntityDto,
+    ) {
+        const entity = await this.entityService.getEntityById(id)
+        return await this.entityService.updateEntity(entity, entityToUpdate)
     }
 
     // create new entity
     @Post('/create')
     @HttpCode(201)
-    createEntity(@Body() newEntity: Entity) {
+    createEntity(@Body() newEntity: CreateEntityDto) {
         return this.entityService.createEntity(newEntity)
     }
 
