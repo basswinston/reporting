@@ -1,68 +1,90 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { IsBoolean, IsDate, isNotEmpty, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { report_user } from "src/report_user/report_user";
-import { report_entities_entity } from "src/report_entities_entity/report_entities_entity";
-import { incident } from "src/incident/incident";
+import {
+    Column,
+    Entity as _Entity,
+    ManyToMany,
+    JoinTable,
+    ManyToOne,
+    OneToOne,
+    PrimaryGeneratedColumn,
+    JoinColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
+} from 'typeorm'
+import { User } from '../user/user'
+import { Entity } from '../entity/entity'
+import { Incident } from '../incident/incident'
 
-@Entity()
+export enum ReportType { 
+    MoneyLaundering = 'money_laundering',
+    Fraud = 'fraud',
+    TerroristFinancing = 'terrorist_financing',
+    IdentityTheft = 'identity_theft',
+    Cybercrime = 'cybercrime',
+    TaxEvasion = 'tax_evasion',
+    Other = 'other'
+}
+export enum ReportStatus {  
+    New = 'new',
+    InProgress = 'in_progress',
+    Resolved = 'resolved',
+    Rejected = 'rejected',
+    Closed = 'closed'
+}
+
+@_Entity()
 export class Report {
-
     @PrimaryGeneratedColumn()
-    @IsNotEmpty()
-    @IsNumber()
-    report_id: number
+    reportId: number
 
     @Column()
-    @IsNotEmpty()
-    @IsString()
-    report_title: string;
+    reportTitle: string
+
+    @Column( { 
+        type: 'enum',
+        enum: ReportType
+     } )
+    reportType: ReportType
+
+    @Column({
+        type: 'enum',
+        enum: ReportStatus,
+        default: ReportStatus.New
+    })
+    reportStatus: ReportStatus
 
     @Column()
-    @IsString()
-    report_type: string;
+    reporterId: number
+
+    @ManyToOne(() => User, (user) => user.authoredReports)
+    author: User
 
     @Column()
-    @IsString()
-    report_status: string;
+    assignedTo: number
+
+    @ManyToOne(() => User, (user) => user.authoredReports)
+    assignedUser: User
+
+    @CreateDateColumn({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP'
+    })
+    creationDate: Date
+
+    @UpdateDateColumn({
+        type: 'timestamp',
+        default: () => 'CURRENT_TIMESTAMP',
+        onUpdate: 'CURRENT_TIMESTAMP'
+    })
+    lastEdited: Date
 
     @Column()
-    @IsString()
-    reporter_id: number;
+    incidentId: number
 
-    @Column()
-    @IsString()
-    assigned_to: number;
+    @OneToOne(() => Incident)
+    @JoinColumn()
+    incident: Incident
 
-    @Column()
-    @IsNotEmpty()
-    @IsBoolean()
-    is_resolved: boolean;
-
-    @Column()
-    @IsNotEmpty()
-    @IsDate()
-    creation_date: Date;
-
-    @Column()
-    @IsNotEmpty()
-    @IsDate()
-    last_edited: Date;
-
-    @Column()
-    @IsNotEmpty()
-    @IsString()
-    incident_id: number;
-
-    @ManyToOne(() => Report_user, report_user => report_user.userId)
-    report_user: Report_user;
-
-
-    @OnetoOne(() => Report_entities_entity, report_entities_entity => report_entities_entity.report_id)
-    report_entities_entity: Report_entities_entity;
-
-    
-    @OnetoOne(() => Incident, incident => incident.report_id)
-    incident: Incident;
-
-
+    @ManyToMany(() => Entity, (entity) => entity.reports)
+    @JoinTable()
+    entities: Entity[]
 }

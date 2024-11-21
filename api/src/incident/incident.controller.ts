@@ -41,8 +41,9 @@ export class IncidentController {
   // update an incident
   @Put('/update/:id')
   @HttpCode(200)
-  updateIncident(@Param('id') routeId: number, @Body() incidentToUpdate) {
-    return this.incidentService.updateIncident(routeId, incidentToUpdate);
+  async updateIncident(@Param('id') routeId: number, @Body() incidentToUpdate) {
+    const incident = await this.incidentService.getIncidentById(routeId);
+    return this.incidentService.updateIncident(incident, incidentToUpdate);
   }
 
   // delete an incident

@@ -1,8 +1,9 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository, In, FindOneOptions } from 'typeorm'
-import { User } from './user.entity'
-import { SaveUserDto } from './dto/save-user.dto'
+import { User } from './user'
+import { CreateUserDto } from './dto/create-user.dto'
+import { UpdateUserDto } from './dto/update-user.dto'
 
 @Injectable()
 export class UserService {
@@ -41,12 +42,12 @@ export class UserService {
         return await this.repo.find(options)
     }
 
-    async create(data: SaveUserDto) {
+    async create(data: CreateUserDto) {
         const newUser = this.repo.create(data)
         return await this.repo.save(newUser)
     }
 
-    async update(user: User, updateData: SaveUserDto) {
+    async update(user: User, updateData: UpdateUserDto) {
         const updatedUser = this.repo.merge(user, updateData)
         return await this.repo.save(updatedUser)
     }
